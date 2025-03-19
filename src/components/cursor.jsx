@@ -5,7 +5,7 @@ import { isDesktop } from '@/lib/utils';
 
 const CursorWrapper = styled(motion.div)`
   position: fixed;
-  z-index: 2147483647;
+  z-index: 101;
   user-select: none;
   pointer-events: none;
 `;
@@ -44,7 +44,7 @@ const Dot = styled(motion.div)`
       `}
 `;
 
-const CustomCursor = () => {
+export const Cursor = () => {
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
   const scale = useMotionValue(1);
@@ -119,5 +119,3 @@ const CustomCursor = () => {
         </CursorWrapper>
   );
 };
-
-export default CustomCursor; 

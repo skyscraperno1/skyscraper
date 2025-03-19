@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styled from 'styled-components';
 import { motion, useInView } from 'framer-motion';
-import CountUp from 'react-countup';
+import { Typewrite } from '@/components/typewrite';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,30 +73,29 @@ const skills = [
   }
 ];
 
-export const MySkills = () => {
+export const Skills = () => {
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const statsRef = useRef(null);
+  const nameRef = useRef(null)
   const isInView = useInView(statsRef, { once: true });
 
   useEffect(() => {
     const slider = sliderRef.current;
     const title = titleRef.current;
     const subtitle = subtitleRef.current;
+    const name = nameRef.current;
+    const numbers = document.querySelectorAll('.animated-number');
 
-    // 滑块动画
-    gsap.to(slider, {
-      x: () => -(slider.scrollWidth - window.innerWidth + 80),
-      ease: "none",
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
         end: "bottom top",
         scrub: 1,
         pin: true,
-        markers: true,
         onUpdate: (self) => {
           const progress = self.progress;
           // 0-50% 进度时，第一个标题从 0-100%
@@ -113,13 +112,35 @@ export const MySkills = () => {
       }
     });
 
+    // 添加所有动画到 timeline
+    tl
+      .to(slider, {
+        x: () => -(slider.scrollWidth - window.innerWidth + 80),
+        ease: "none",
+      })
+      .to(name, {
+        xPercent: 25,
+        ease: "linear",
+      }, "<") // "<" 表示与前一个动画同时开始
+      .to(numbers, {
+        innerText: gsap.utils.wrap([6, 20, 24]), // 为每个数字设置目标值
+        snap: { innerText: 1 },
+        ease: "none",
+      }, "<");
+
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, []);
 
   return (
-    <div ref={containerRef} className='w-full min-h-screen px-10'>
+    <section ref={containerRef} className='overflow-hidden w-screen min-h-screen px-10 pt-20'>
+      <Typewrite examples={[
+        "Passionate about web development",
+        "Experienced in React & Vue",
+        "Love building beautiful UI/UX",
+        "Always learning new technologies",
+      ]} />
       <Title
         ref={titleRef}
         className='font-sisyphus text-center uppercase top-[5%] z-10'
@@ -134,7 +155,6 @@ export const MySkills = () => {
       >
         font-end developer
       </SubTitle>
-
       {/* 滚动的技能列表 */}
       <div
         ref={sliderRef}
@@ -161,7 +181,7 @@ export const MySkills = () => {
           </div>
         ))}
       </div>
-      <motion.div 
+      <motion.div
         ref={statsRef}
         initial={{ y: 50, opacity: 0 }}
         animate={isInView ? { y: 0, opacity: 1 } : { y: 50, opacity: 0 }}
@@ -174,7 +194,7 @@ export const MySkills = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           <h4 className="text-white/90 text-xl mb-2">
-            <CountUp end={6} duration={2} suffix="+" enableScrollSpy />
+            <span className="animated-number">0</span><span className="text-lg">+</span>
             <span className="text-lg ml-1">Years</span>
           </h4>
           <p className="text-white/50">Professional Experience</p>
@@ -186,7 +206,7 @@ export const MySkills = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <h4 className="text-white/90 text-xl mb-2">
-            <CountUp end={20} duration={2} suffix="+" enableScrollSpy />
+            <span className="animated-number">0</span><span className="text-lg">+</span>
             <span className="text-lg ml-1">Projects</span>
           </h4>
           <p className="text-white/50">Successfully Delivered</p>
@@ -198,26 +218,17 @@ export const MySkills = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <h4 className="text-white/90 text-xl mb-2">
-            <CountUp end={24} duration={2} suffix="/7" enableScrollSpy />
+            <span className="animated-number">0</span><span className="text-lg">/7</span>
             <span className="text-lg ml-1">Hours</span>
           </h4>
           <p className="text-white/50">Learning & Growing</p>
         </motion.div>
       </motion.div>
       <div className="mt-20 text-center">
-        <h3 className="text-white/80 text-xl font-light mb-4">
-          And More Coming Soon...
-        </h3>
-        <p className="text-white/60 max-w-2xl mx-auto text-lg leading-relaxed">
-          As a passionate developer, I'm always learning and exploring new technologies.
-          Currently diving deep into Web3, Blockchain development, and advanced animation techniques.
-        </p>
-        <div className="mt-8 flex justify-center items-center gap-2 text-white/40">
-          <span className="w-12 h-[1px] bg-white/40"></span>
-          <p className="text-sm uppercase tracking-wider">Scroll to explore</p>
-          <span className="w-12 h-[1px] bg-white/40"></span>
+        <div className="flex justify-center items-center">
+          <h1 ref={nameRef} className='shrink-0 font-bowlby-one text-[10vw]'>Skyscraper No.1 Skyscraper No.1 Skyscraper No.1</h1>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

@@ -1,17 +1,16 @@
-
 import { containerVariants } from "./animations";
 import { useMotionValue, motion, useSpring, useTransform } from "framer-motion";
-import  { useRef } from "react";
+import { useRef } from "react";
 import { FiArrowRight } from "react-icons/fi";
+
 const menuItems = [
-  { title: "Home", href: "#", imgSrc: '/src/assets/imgs/avatar.jpg', subheading: '主页' },
-  { title: "About", href: "#", imgSrc: '/src/assets/imgs/avatar.jpg', subheading: '关于我' },
-  { title: "Projects", href: "#", imgSrc: '/src/assets/imgs/avatar.jpg', subheading: '作品集' },
-  { title: "Contact", href: "#", imgSrc: '/src/assets/imgs/avatar.jpg', subheading: '联系我' },
+  { title: "Home", href: "#home", imgSrc: '/src/assets/imgs/avatar.jpg', subheading: '主页' },
+  { title: "Skills", href: "#skills", imgSrc: '/src/assets/imgs/avatar.jpg', subheading: '技能' },
+  { title: "Experience", href: "#experiences", imgSrc: '/src/assets/imgs/avatar.jpg', subheading: '经历' },
+  { title: "Projects", href: "#projects", imgSrc: '/src/assets/imgs/avatar.jpg', subheading: '作品' },
 ];
 
-
-const Link = ({ heading, imgSrc, subheading, href }) => {
+const Link = ({ heading, imgSrc, subheading, href, onClose }) => {
   const ref = useRef(null);
 
   const x = useMotionValue(0);
@@ -39,10 +38,27 @@ const Link = ({ heading, imgSrc, subheading, href }) => {
     y.set(yPct);
   };
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    onClose(); // 先关闭弹窗
+
+    // 等动画结束后滚动到对应区域
+    setTimeout(() => {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }, 300);
+  };
+
   return (
     <motion.a
       href={href}
       ref={ref}
+      onClick={handleClick}
       onMouseMove={handleMouseMove}
       initial="initial"
       whileHover="whileHover"
@@ -117,8 +133,7 @@ const Link = ({ heading, imgSrc, subheading, href }) => {
   );
 };
 
-
-export const Contact = () => {
+export const Contact = ({ onClose }) => {
   return (
     <motion.div
       className="h-full flex flex-col items-center justify-center gap-8 w-full"
@@ -131,10 +146,10 @@ export const Contact = () => {
           subheading={item.subheading}
           imgSrc={item.imgSrc}
           href={item.href}
+          onClose={onClose}
           className="text-6xl font-bold text-white cursor-pointer hover:text-[#6366f1]"
-        >
-        </Link>
+        />
       ))}
     </motion.div>
-  )
-}
+  );
+};

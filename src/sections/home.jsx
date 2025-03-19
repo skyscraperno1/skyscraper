@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
-export const NameHero = () => {
+export const Home = () => {
   const wrapperRef = useRef(null);
   const [viewport, setViewport] = useState({
     width: window.innerWidth,
@@ -180,14 +180,14 @@ export const NameHero = () => {
           </text>
           <text
             x="50%"
-            y="98%"
+            y="95%"
             fill="#fff"
             dominantBaseline="middle"
             textAnchor="middle"
             fontSize="16px"
             className="font-bowlby-one leading-[0.9] font-normal"
           >
-            Scroll Down & See My Works
+            Scroll Down
           </text>
         </mask>
 

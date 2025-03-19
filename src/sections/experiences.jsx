@@ -3,8 +3,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styled from 'styled-components';
 
-gsap.registerPlugin(ScrollTrigger);
-
 const TimelineWrapper = styled.div`
   min-height: 200vh;
   padding: 100px 0;
@@ -116,7 +114,7 @@ const experiences = [
   }
 ];
 
-export const WorkingExperience = () => {
+export const Experiences = () => {
   const timelineRef = useRef(null);
   const itemsRef = useRef([]);
   const pathRef = useRef(null);
@@ -149,7 +147,7 @@ export const WorkingExperience = () => {
     });
 
     // 为每个项目创建动画
-    items.forEach((item, index) => {
+    items.forEach((item) => {
       gsap.fromTo(
         item,
         {
